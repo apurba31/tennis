@@ -2,24 +2,31 @@ package com.example.tennis.controller;
 
 import com.example.tennis.model.Player;
 import com.example.tennis.service.PlayerService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
+import java.util.Arrays;
+import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 class PlayerControllerTest {
 
     private MockMvc mockMvc;
+    private ObjectMapper objectMapper = new ObjectMapper();
 
     @Mock
     private PlayerService playerService;
@@ -27,23 +34,107 @@ class PlayerControllerTest {
     @InjectMocks
     private PlayerController playerController;
 
-    @BeforeAll
+    @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
         mockMvc = MockMvcBuilders.standaloneSetup(playerController).build();
     }
     @Test
     public void testAddPlayer() throws Exception {
-        Player player = new Player(1L, "John Doe", 25);
-        when(playerService.savePlayer(any(Player.class))).thenReturn(player);
+        Player player = new Player();
+        player.setName("Roger Federer");
+        when(playerService.savePlayer(player)).thenReturn(player);
         mockMvc.perform(post("/api/v1/addPlayer")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"name\": \"John Doe\", \"age\": 25}"))
+                .content(objectMapper.writeValueAsString(player)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value("John Doe"))
-                .andExpect(jsonPath("$.age").value(25));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("Roger Federer"));
 
         verify(playerService, times(1)).savePlayer(any(Player.class));
+    }
+    @Test
+    public void testAddPlayers() throws Exception {
+        Player player1 = new Player();
+        player1.setName("Roger Federer");
+        Player player2 = new Player();
+        player2.setName("Rafael Nadal");
+        List<Player> players = Arrays.asList(player1, player2);
+
+        when(playerService.savePlayers(players)).thenReturn(players);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/addPlayers")
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(players)))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("Roger Federer"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].name").value("Rafael Nadal"));
+    }
+    @Test
+    public void testFindAllPlayers() throws Exception {
+        Player player1 = new Player();
+        player1.setName("Roger Federer");
+        Player player2 = new Player();
+        player2.setName("Rafael Nadal");
+        List<Player> players = Arrays.asList(player1, player2);
+
+        when(playerService.getPlayers()).thenReturn(players);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/players"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("Roger Federer"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].name").value("Rafael Nadal"));
+    }
+
+    @Test
+    public void testFindPlayerById() throws Exception {
+        Player player = new Player();
+        player.setName("Roger Federer");
+        long id = 1L;
+
+        when(playerService.getPlayerById(id)).thenReturn(player);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/player/id/{id}", id))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("Roger Federer"));
+    }
+
+    @Test
+    public void testFindPlayerByName() throws Exception {
+        Player player = new Player();
+        player.setName("Roger Federer");
+        String name = "Roger Federer";
+
+        when(playerService.findByName(name)).thenReturn(player);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/player/name/{name}", name))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("Roger Federer"));
+    }
+
+    @Test
+    public void testUpdatePlayer() throws Exception {
+        Player player = new Player();
+        player.setName("Roger Federer");
+
+        when(playerService.updatePlayer(player)).thenReturn(player);
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/update")
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(player)))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("Roger Federer"));
+    }
+
+    @Test
+    public void testDeletePlayer() throws Exception {
+        long id = 1L;
+        String responseMessage = "Player deleted successfully";
+
+        when(playerService.deleteById(id)).thenReturn(responseMessage);
+
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/delete/{id}", id))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().string(responseMessage));
     }
 
 }

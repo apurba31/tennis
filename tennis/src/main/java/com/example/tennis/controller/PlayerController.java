@@ -14,6 +14,7 @@ public class PlayerController {
     private PlayerService playerService;
     @PostMapping("/addPlayer")
     public Player addPlayer(@RequestBody Player player){
+
         return playerService.savePlayer(player);
     }
     @PostMapping("/addPlayers")
@@ -22,22 +23,27 @@ public class PlayerController {
     }
     @GetMapping("/players")
     public List<Player> findAllPlayers(){
+
         return playerService.getPlayers();
     }
-    @GetMapping("/player/{id}")
+    @GetMapping("/player/id/{id}")
     public Player findPlayerById(@PathVariable long id){
+
         return playerService.getPlayerById(id);
     }
-    @GetMapping("/player/{name}")
-    public Player findPlayerById(@PathVariable String name){
+    @GetMapping("/player/name/{name}")
+    public Player findPlayerByName(@PathVariable String name){
+
         return playerService.findByName(name);
     }
     @PutMapping("/update")
     public Player updatePlayer(@RequestBody Player player){
+
         return playerService.updatePlayer(player);
     }
     @DeleteMapping("/delete/{id}")
     public String deletePlayer(@PathVariable long id){
+
         return playerService.deleteById(id);
     }
 }
