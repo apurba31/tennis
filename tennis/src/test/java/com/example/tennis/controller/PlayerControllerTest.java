@@ -3,7 +3,6 @@ package com.example.tennis.controller;
 import com.example.tennis.model.Player;
 import com.example.tennis.service.PlayerService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -20,8 +19,8 @@ import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class PlayerControllerTest {
 
@@ -44,7 +43,7 @@ class PlayerControllerTest {
         Player player = new Player();
         player.setName("Roger Federer");
         when(playerService.savePlayer(player)).thenReturn(player);
-        mockMvc.perform(post("/api/v1/addPlayer")
+        mockMvc.perform(post("/api/v1/players/addPlayer")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(player)))
                 .andExpect(status().isOk())
@@ -62,7 +61,7 @@ class PlayerControllerTest {
 
         when(playerService.savePlayers(players)).thenReturn(players);
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/addPlayers")
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/players/addPlayers")
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(players)))
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -79,7 +78,7 @@ class PlayerControllerTest {
 
         when(playerService.getPlayers()).thenReturn(players);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/players"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/players/players"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("Roger Federer"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[1].name").value("Rafael Nadal"));
@@ -93,7 +92,7 @@ class PlayerControllerTest {
 
         when(playerService.getPlayerById(id)).thenReturn(player);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/player/id/{id}", id))
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/players/player/id/{id}", id))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("Roger Federer"));
     }
@@ -106,7 +105,7 @@ class PlayerControllerTest {
 
         when(playerService.findByName(name)).thenReturn(player);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/player/name/{name}", name))
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/players/player/name/{name}", name))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("Roger Federer"));
     }
@@ -118,7 +117,7 @@ class PlayerControllerTest {
 
         when(playerService.updatePlayer(player)).thenReturn(player);
 
-        mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/update")
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/players/update")
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(player)))
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -132,7 +131,7 @@ class PlayerControllerTest {
 
         when(playerService.deleteById(id)).thenReturn(responseMessage);
 
-        mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/delete/{id}", id))
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/players/delete/{id}", id))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().string(responseMessage));
     }

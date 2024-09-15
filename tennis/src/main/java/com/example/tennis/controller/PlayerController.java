@@ -2,19 +2,22 @@ package com.example.tennis.controller;
 
 import com.example.tennis.model.Player;
 import com.example.tennis.service.PlayerService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/players")
 public class PlayerController {
+    private static final Logger logger = LoggerFactory.getLogger(PlayerService.class);
     @Autowired
     private PlayerService playerService;
     @PostMapping("/addPlayer")
     public Player addPlayer(@RequestBody Player player){
-
+        logger.info("");
         return playerService.savePlayer(player);
     }
     @PostMapping("/addPlayers")
@@ -46,4 +49,5 @@ public class PlayerController {
 
         return playerService.deleteById(id);
     }
+
 }
