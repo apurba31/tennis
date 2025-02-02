@@ -17,16 +17,17 @@ public class PlayerController {
     private PlayerService playerService;
     @PostMapping("/addPlayer")
     public Player addPlayer(@RequestBody Player player){
-        logger.info("");
+        logger.info("Player added");
         return playerService.savePlayer(player);
     }
     @PostMapping("/addPlayers")
     public List<Player> addPlayers(@RequestBody List<Player> players){
+        logger.info("Players added");
         return playerService.savePlayers(players);
     }
     @GetMapping("/players")
     public List<Player> findAllPlayers(){
-
+        logger.info("All players are listed");
         return playerService.getPlayers();
     }
     @GetMapping("/player/id/{id}")

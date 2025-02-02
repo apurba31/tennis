@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 
 
@@ -15,6 +16,8 @@ public class Player {
     @Id
     @GeneratedValue
     private long id;
+
+    @NotEmpty(message = "Player name must not be empty")
     private String name;
 
     public Player(long l, String johnDoe, int i) {

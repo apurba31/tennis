@@ -1,23 +1,28 @@
 package com.example.tennis.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 public class Matches {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    @NotEmpty(message="Date must not be empty")
     private String date;
-
+    @NotNull(message = "Player 1 must not be null")
     @ManyToOne
     @JoinColumn(name = "player1_id")
+    @Valid
     private Player player1;
-
+    @NotNull(message = "Player 2 must not be null")
     @ManyToOne
     @JoinColumn(name = "player2_id")
+    @Valid
     private Player player2;
-
+    @NotNull(message = "Tournament id must not be empty")
     @ManyToOne
     @JoinColumn(name = "tournament_id")
     private Tournament tournament;

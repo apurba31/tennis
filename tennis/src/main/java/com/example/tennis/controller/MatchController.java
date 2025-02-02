@@ -2,6 +2,9 @@ package com.example.tennis.controller;
 
 import com.example.tennis.model.Matches;
 import com.example.tennis.service.MatchService;
+import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,11 +15,13 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/matches")
 public class MatchController {
+    private static final Logger logger = LoggerFactory.getLogger(MatchController.class);
     @Autowired
     private MatchService matchService;
 
     @PostMapping("/addMatch")
-    public ResponseEntity<Matches> createMatch(@RequestBody Matches match) {
+    public ResponseEntity<Matches> createMatch(@Valid @RequestBody Matches match) {
+        logger.info("Match created");
         Matches createdMatch = matchService.createMatch(match);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdMatch);
     }

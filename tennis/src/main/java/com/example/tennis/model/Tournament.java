@@ -2,6 +2,8 @@ package com.example.tennis.model;
 
 
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,10 +15,11 @@ public class Tournament {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    @NotEmpty(message = "Tournament name must not be empty")
     private String name;
 
     @OneToMany(mappedBy = "tournament")
+    @Valid
     private List<Matches> matches = new ArrayList<>();
 
     public Long getId() {
