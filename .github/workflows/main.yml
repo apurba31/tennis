@@ -1,0 +1,11 @@
+#Github Actions workflow for Tennis app
+name: Java CI
+
+on: push
+jobs:
+  Explore-Github-Actions:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "The job was run"
+
+  
