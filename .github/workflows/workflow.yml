@@ -28,9 +28,12 @@ jobs:
       uses: actions/cache@v3
       with:
         path: ~/.gradle/caches
-        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}-${{ github.run_id }}
         restore-keys: |
           ${{ runner.os }}-gradle-
+
+    - name: Validate cache restoration
+      run: if [ -d ~/.gradle/caches ]; then echo "Cache found"; else echo "Cache not found"; fi
 
     - name: Build with Gradle Wrapper
       run: ./gradlew build
@@ -54,9 +57,12 @@ jobs:
       uses: actions/cache@v3
       with:
         path: ~/.gradle/caches
-        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}-${{ github.run_id }}
         restore-keys: |
           ${{ runner.os }}-gradle-
+
+    - name: Validate cache restoration
+      run: if [ -d ~/.gradle/caches ]; then echo "Cache found"; else echo "Cache not found"; fi
 
     - name: Generate and submit dependency graph
       uses: gradle/actions/dependency-submission@v4
