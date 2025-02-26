@@ -2,6 +2,7 @@ package com.example.tennis.controller;
 
 import com.example.tennis.model.Score;
 import com.example.tennis.service.ScoreService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

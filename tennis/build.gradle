@@ -29,6 +29,12 @@ dependencies {
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	annotationProcessor 'org.projectlombok:lombok'
+//	implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.8.5'{
+//		exclude group: 'org.springdoc', module: 'springdoc-openapi-ui'
+//	}
+	implementation ('org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0') {
+		exclude group: 'org.springdoc', module: 'springdoc-openapi-ui'
+	}
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 	testImplementation group: 'org.mockito', name: 'mockito-junit-jupiter', version: '5.11.0'
