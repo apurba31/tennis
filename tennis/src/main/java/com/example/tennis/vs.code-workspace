@@ -1,0 +1,11 @@
+{
+	"folders": [
+		{
+			"path": "../../../../../../../../sample_chrome_extension"
+		},
+		{
+			"path": "../../../../../../.."
+		}
+	],
+	"settings": {}
+}
