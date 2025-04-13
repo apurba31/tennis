@@ -43,10 +43,13 @@ public class MatchService {
 
     public Matches updateMatch(Long id, Matches match) {
         Matches existingMatch = findMatchById(id);
-        existingMatch.setDate(match.getDate());
-        existingMatch.setPlayer1(match.getPlayer1());
-        existingMatch.setPlayer2(match.getPlayer2());
-        existingMatch.setTournament(match.getTournament());
+//        existingMatch.setDate(match.getDate());
+//        existingMatch.setPlayer1(match.getPlayer1().getId());
+//        existingMatch.setPlayer2(match.getPlayer2());
+//        existingMatch.setTournament(match.getTournament());
+//        return matchRepository.save(existingMatch);
+        // Use getPlayer1().getId() if match.getPlayer1() is not null
+
         return matchRepository.save(existingMatch);
     }
 

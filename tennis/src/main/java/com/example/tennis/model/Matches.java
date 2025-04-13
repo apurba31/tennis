@@ -13,18 +13,20 @@ public class Matches {
     @NotEmpty(message="Date must not be empty")
     private String date;
     @NotNull(message = "Player 1 must not be null")
-    @ManyToOne
-    @JoinColumn(name = "player1_id")
+//    @ManyToOne(fetch = FetchType.LAZY)  // Use LAZY fetching to avoid unnecessary loading
+//    @JoinColumn(name = "player1_id", nullable = false)  // Ensure it's NOT NULL in DB
+    @Column(name = "player1_id")
     @Valid
-    private Player player1;
+    private Long player1;
     @NotNull(message = "Player 2 must not be null")
-    @ManyToOne
-    @JoinColumn(name = "player2_id")
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "player2_id", nullable = false)
     @Valid
-    private Player player2;
+    @Column(name = "player2_id")
+    private Long player2;
     @NotNull(message = "Tournament id must not be empty")
-    @ManyToOne
-    @JoinColumn(name = "tournament_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "tournament_id", nullable = false)
     private Tournament tournament;
 
     public Long getId() {
@@ -43,20 +45,12 @@ public class Matches {
         this.date = date;
     }
 
-    public Player getPlayer1() {
+    public Long getPlayer1() {
         return player1;
     }
 
-    public void setPlayer1(Player player1) {
-        this.player1 = player1;
-    }
-
-    public Player getPlayer2() {
+    public Long getPlayer2() {
         return player2;
-    }
-
-    public void setPlayer2(Player player2) {
-        this.player2 = player2;
     }
 
     public Tournament getTournament() {
